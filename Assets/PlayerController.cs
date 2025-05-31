@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-	
+	public bool canLookAround = true;
 	[Header("Referencer")]
 	public Rigidbody rb;
 	public Transform head;
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (!canLookAround) return;  // Disable rotation while dialogue
         //Horizontal rotation
 		transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 2f);
     }
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
 	
 	void LateUpdate () 
 	{
+	  if (!canLookAround) return;  // Disable rotation while dialogue
 	  // Vertical rotation
 	  Vector3 e = head.eulerAngles;
 	  e.x -= Input.GetAxis("Mouse Y") * 2f;

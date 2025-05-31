@@ -9,6 +9,9 @@ public class ClientMover : MonoBehaviour
 
     private Transform player;
     private bool isMoving = true;
+	private bool canInteract = false;
+    private DialogueManager dialogueManager;
+
 
     void Start()
     {
@@ -20,10 +23,20 @@ public class ClientMover : MonoBehaviour
         GameObject playerObj = GameObject.Find("Player");
         if (playerObj != null)
             player = playerObj.transform;
+		
+		dialogueManager = FindObjectOfType<DialogueManager>();
     }
 
     void Update()
     {
+		 if (!isMoving && canInteract && Input.GetKeyDown(KeyCode.E))
+        {
+            if (!dialogueManager.IsDialogueActive)
+            {
+                dialogueManager.ShowRandomDialogue();
+            }
+        }
+		
         if (!isMoving || SeatPoint == null)
             return;
 
@@ -41,10 +54,20 @@ public class ClientMover : MonoBehaviour
         if (Vector3.Distance(transform.position, SeatPoint.position) < stopDistance)
         {
             isMoving = false;
+			canInteract = true;
 
             // Afișează semnul "!"
             if (exclamationMark != null)
                 exclamationMark.SetActive(true);
+        }
+		
+    }
+	void OnDrawGizmosSelected()
+    {
+        if (SeatPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(SeatPoint.position, stopDistance);
         }
     }
 }
