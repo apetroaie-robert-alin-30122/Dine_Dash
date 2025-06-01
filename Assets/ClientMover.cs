@@ -43,7 +43,7 @@ public class ClientMover : MonoBehaviour
             if (!dialogueManager.IsDialogueActive && player != null)
             {
                 float dist = Vector3.Distance(player.position, transform.position);
-                if (dist < 3f)
+                if (dist <= 10f)
                 {
                     dialogueManager.currentClient = gameObject;
                     HideExclamation();

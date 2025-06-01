@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
 	public float walkSpeed;
 	public float runSpeed;
 	
+	[HideInInspector]
+    public bool isLocked = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,13 +27,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (!canLookAround) return;  // Disable rotation while dialogue
+		
+		if (isLocked) return ;// Disable movement and rotation while dialogue
+		  
         //Horizontal rotation
 		transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 2f);
     }
 	
 	void FixedUpdate()
 	{
+	if (isLocked) return;
+		
 	Vector3 newVelocity = Vector3.up * rb.linearVelocity.y;
 	float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
 	newVelocity.x = Input.GetAxis("Horizontal") * speed;
@@ -41,7 +47,7 @@ public class PlayerController : MonoBehaviour
 	
 	void LateUpdate () 
 	{
-	  if (!canLookAround) return;  // Disable rotation while dialogue
+	  if (isLocked) return;  // Disable rotation while dialogue
 	  // Vertical rotation
 	  Vector3 e = head.eulerAngles;
 	  e.x -= Input.GetAxis("Mouse Y") * 2f;

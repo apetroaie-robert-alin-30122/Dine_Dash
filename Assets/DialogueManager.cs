@@ -38,7 +38,8 @@ public class DialogueManager : MonoBehaviour
     }
 
     public void ShowRandomDialogue()
-    {
+    { 
+	
         if (dialoguePhrases.Count == 0) return;
 
         currentPhrase = dialoguePhrases[Random.Range(0, dialoguePhrases.Count)];
@@ -60,7 +61,9 @@ public class DialogueManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
 
         if (playerController != null)
-            playerController.canLookAround = false;
+            playerController.isLocked = true;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
 
         if (currentClient != null)
         {
@@ -77,8 +80,12 @@ public class DialogueManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        if (playerController != null)
-            playerController.canLookAround = true;
+        if (playerController != null){
+            playerController.isLocked = false;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+		}
+		TooltipManager.Instance.HideTooltip();
     }
 
     void OnResponseSelected(int selectedButtonIndex)
