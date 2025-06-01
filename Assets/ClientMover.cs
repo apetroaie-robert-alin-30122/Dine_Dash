@@ -1,68 +1,114 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class ClientMover : MonoBehaviour
 {
-    public Transform SeatPoint;              // Setat automat din ClientSpawner
+    public Transform SeatPoint;
     public float speed = 2f;
     public float stopDistance = 0.1f;
-    public GameObject exclamationMark;       // PNG-ul "!" deasupra capului
+
+    public GameObject exclamationMark;
+    public GameObject angryFace;
 
     private Transform player;
     private bool isMoving = true;
-	private bool canInteract = false;
+    private bool canInteract = false;
     private DialogueManager dialogueManager;
 
+    public Transform entryPoint;
 
     void Start()
     {
-        // Ascunde "!" la început
         if (exclamationMark != null)
             exclamationMark.SetActive(false);
 
-        // Găsește jucătorul
-        GameObject playerObj = GameObject.Find("Player");
-        if (playerObj != null)
-            player = playerObj.transform;
-		
-		dialogueManager = FindObjectOfType<DialogueManager>();
+        if (angryFace != null)
+            angryFace.SetActive(false);
+
+        player = GameObject.Find("Player")?.transform;
+        dialogueManager = FindObjectOfType<DialogueManager>();
+
+        if (entryPoint == null)
+        {
+            GameObject spawnerObj = GameObject.Find("Spawner");
+            if (spawnerObj != null)
+                entryPoint = spawnerObj.GetComponent<ClientSpawner>().entryPoint;
+        }
     }
 
     void Update()
     {
-		 if (!isMoving && canInteract && Input.GetKeyDown(KeyCode.E))
+        if (!isMoving && canInteract && Input.GetKeyDown(KeyCode.E))
         {
-            if (!dialogueManager.IsDialogueActive)
+            if (!dialogueManager.IsDialogueActive && player != null)
             {
-                dialogueManager.ShowRandomDialogue();
+                float dist = Vector3.Distance(player.position, transform.position);
+                if (dist < 3f)
+                {
+                    dialogueManager.currentClient = gameObject;
+                    HideExclamation();
+                    dialogueManager.ShowRandomDialogue();
+                }
             }
         }
-		
+
         if (!isMoving || SeatPoint == null)
             return;
 
-        // Deplasare spre scaun
         transform.position = Vector3.MoveTowards(transform.position, SeatPoint.position, speed * Time.deltaTime);
 
-        // Se uită spre jucător doar pe Y
         if (player != null)
         {
             Vector3 lookPos = new Vector3(player.position.x, transform.position.y, player.position.z);
             transform.LookAt(lookPos);
         }
 
-        // Când ajunge la scaun
         if (Vector3.Distance(transform.position, SeatPoint.position) < stopDistance)
         {
             isMoving = false;
-			canInteract = true;
+            canInteract = true;
 
-            // Afișează semnul "!"
             if (exclamationMark != null)
                 exclamationMark.SetActive(true);
         }
-		
     }
-	void OnDrawGizmosSelected()
+
+    public void HideExclamation()
+    {
+        if (exclamationMark != null)
+            exclamationMark.SetActive(false);
+    }
+
+    public void ReturnToSpawn(bool showAngryFace)
+    {
+        if (showAngryFace && angryFace != null)
+            angryFace.SetActive(true);
+
+        StartCoroutine(MoveBackToEntry());
+    }
+
+    IEnumerator MoveBackToEntry()
+    {
+        if (entryPoint == null)
+        {
+            Debug.LogError("EntryPoint is null in ClientMover.");
+            yield break;
+        }
+
+        Vector3 target = entryPoint.position;
+        while (Vector3.Distance(transform.position, target) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            yield return null;
+        }
+
+        if (angryFace != null)
+            angryFace.SetActive(false);
+
+        Destroy(gameObject);
+    }
+
+    void OnDrawGizmosSelected()
     {
         if (SeatPoint != null)
         {
