@@ -9,6 +9,7 @@ public class DialoguePhrase
     [TextArea(2, 5)]
     public string phrase;
     public int correctButtonIndex;
+	public GameObject foodPrefab;
 }
 
 public class DialogueManager : MonoBehaviour
@@ -27,6 +28,8 @@ public class DialogueManager : MonoBehaviour
     public GameObject currentClient;
     public TMP_Text scoreText;
     private int score = 0;
+	
+	private FoodSpawner foodSpawner;
 
     void Awake()
     {
@@ -35,6 +38,7 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.LogWarning("PlayerController not found in the scene!");
         }
+		foodSpawner = FindObjectOfType<FoodSpawner>();
     }
 
     public void ShowRandomDialogue()
@@ -95,6 +99,8 @@ public class DialogueManager : MonoBehaviour
             Debug.Log("Correct answer selected!");
             score += 10;
             UpdateScoreUI();
+			if (currentPhrase.foodPrefab != null)
+                foodSpawner.SpawnFood(currentPhrase.foodPrefab);
 
             // Răspuns corect → clientul rămâne la masă
         }

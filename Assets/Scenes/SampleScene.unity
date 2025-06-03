@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &45017709
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 45017710}
+  m_Layer: 0
+  m_Name: HoldPoint
+  m_TagString: HoldPoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &45017710
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45017709}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.39, z: 0.95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 710295380}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &70454758 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7454304804351141519, guid: ba980ca0a53887641909738619435080, type: 3}
@@ -234,7 +265,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.22222222
+      value: 0.5555556
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1549,6 +1580,68 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: eb95e6f2207a2884da074221a00818de, type: 3}
+--- !u!1 &555577483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 555577484}
+  m_Layer: 0
+  m_Name: FoodSpawnPoint_4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &555577484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555577483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.51, y: 6.16, z: -26.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &601856397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 601856398}
+  m_Layer: 0
+  m_Name: FoodSpawnPoint_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &601856398
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601856397}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.51, y: 6.16, z: -20.69}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &621205495
 GameObject:
   m_ObjectHideFlags: 0
@@ -1826,6 +1919,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f2621ad31a82604f932c2a2773beee1, type: 3}
+--- !u!4 &710295380 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 229271558644724370, guid: ba980ca0a53887641909738619435080, type: 3}
+  m_PrefabInstance: {fileID: 1467832368482357993}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &778943348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2479,6 +2577,37 @@ MonoBehaviour:
     -Juicy
 
     -Mild'
+--- !u!1 &1325156030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1325156031}
+  m_Layer: 0
+  m_Name: FoodSpawnPoint_5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1325156031
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325156030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.51, y: 6.16, z: -31.42}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1331209731 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5600f1668b73ec94096716d7c00c5f60, type: 3}
@@ -2936,6 +3065,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aea28df4275eb144d84c9f8340353ab1, type: 3}
+--- !u!1 &1575324295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1575324296}
+  m_Layer: 0
+  m_Name: FoodSpawnPoint_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1575324296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575324295}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.51, y: 6.16, z: -7.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1579374399
 GameObject:
   m_ObjectHideFlags: 0
@@ -3634,57 +3794,82 @@ MonoBehaviour:
   dialoguePhrases:
   - phrase: "\u201EIch h\xE4tte gerne etwas mit einer angenehmen S\xE4ure.\u201C"
     correctButtonIndex: 0
+    foodPrefab: {fileID: 3123616553075211954, guid: b6632230d1bf8d04aac45c303c954acb, type: 3}
   - phrase: "\u201EHeute m\xF6chte ich etwas Zartes und Herzhaftes essen.\u201C"
     correctButtonIndex: 0
+    foodPrefab: {fileID: 3123616553075211954, guid: b6632230d1bf8d04aac45c303c954acb, type: 3}
   - phrase: "\u201EIch suche ein Gericht, das sch\xF6n w\xFCrzig und saftig ist.\u201C"
     correctButtonIndex: 0
+    foodPrefab: {fileID: 3123616553075211954, guid: b6632230d1bf8d04aac45c303c954acb, type: 3}
   - phrase: "\u201EMir ist nach einem deftigen Essen mit etwas S\xE4ure zumute.\u201C"
     correctButtonIndex: 0
+    foodPrefab: {fileID: 3123616553075211954, guid: b6632230d1bf8d04aac45c303c954acb, type: 3}
   - phrase: "\u201EIch h\xE4tte gern etwas, das sch\xF6n rauchig schmeckt.\u201C"
     correctButtonIndex: 1
+    foodPrefab: {fileID: 3123616553075211954, guid: 4f3ff0d880ddd5046a17d9a0f8187d1d, type: 3}
   - phrase: "\u201EHeute m\xF6chte ich etwas W\xFCrziges und Deftiges bestellen.\u201C"
     correctButtonIndex: 1
+    foodPrefab: {fileID: 3123616553075211954, guid: 4f3ff0d880ddd5046a17d9a0f8187d1d, type: 3}
   - phrase: "\u201EIch bin in Stimmung f\xFCr etwas mit einem leicht scharfen Geschmack.\u201C"
     correctButtonIndex: 1
+    foodPrefab: {fileID: 3123616553075211954, guid: 4f3ff0d880ddd5046a17d9a0f8187d1d, type: 3}
   - phrase: "\u201EMir ist nach etwas mit einer angenehmen S\xE4ure.\u201C"
     correctButtonIndex: 1
+    foodPrefab: {fileID: 3123616553075211954, guid: 4f3ff0d880ddd5046a17d9a0f8187d1d, type: 3}
   - phrase: "\u201EIch h\xE4tte gerne etwas Knuspriges und Saftiges.\u201C"
     correctButtonIndex: 2
+    foodPrefab: {fileID: 3123616553075211954, guid: 062b4f5fb8f9f5d49bf822bf96c025b8, type: 3}
   - phrase: "\u201EHeute suche ich ein Gericht, das mild im Geschmack ist.\u201C"
     correctButtonIndex: 2
+    foodPrefab: {fileID: 3123616553075211954, guid: 062b4f5fb8f9f5d49bf822bf96c025b8, type: 3}
   - phrase: "\u201EIch m\xF6chte etwas, das au\xDFen sch\xF6n knusprig ist.\u201C"
     correctButtonIndex: 2
+    foodPrefab: {fileID: 3123616553075211954, guid: 062b4f5fb8f9f5d49bf822bf96c025b8, type: 3}
   - phrase: "\u201EMir ist nach etwas, das nicht zu scharf oder zu w\xFCrzig ist.\u201C"
     correctButtonIndex: 2
+    foodPrefab: {fileID: 3123616553075211954, guid: 062b4f5fb8f9f5d49bf822bf96c025b8, type: 3}
   - phrase: "\u201EIch h\xE4tte gerne etwas Herzhaftes und kr\xE4ftig im Geschmack.\u201C"
     correctButtonIndex: 3
+    foodPrefab: {fileID: 3123616553075211954, guid: 7c11a9565f5d0364d9b2c56a6c120541, type: 3}
   - phrase: "\u201EHeute m\xF6chte ich ein Gericht, das sch\xF6n w\xFCrzig und reichhaltig
       ist.\u201C"
     correctButtonIndex: 3
+    foodPrefab: {fileID: 3123616553075211954, guid: 7c11a9565f5d0364d9b2c56a6c120541, type: 3}
   - phrase: "\u201EIch bin in Stimmung f\xFCr etwas Deftiges und Aromatisches.\u201C"
     correctButtonIndex: 3
+    foodPrefab: {fileID: 3123616553075211954, guid: 7c11a9565f5d0364d9b2c56a6c120541, type: 3}
   - phrase: "\u201EMir ist nach etwas mit viel Geschmack und einer kr\xE4ftigen So\xDFe.\u201C"
     correctButtonIndex: 3
+    foodPrefab: {fileID: 3123616553075211954, guid: 7c11a9565f5d0364d9b2c56a6c120541, type: 3}
   - phrase: "\u201EIch h\xE4tte gerne eine cremige Beilage mit einem frischen Geschmack.\u201C"
     correctButtonIndex: 4
+    foodPrefab: {fileID: 3123616553075211954, guid: 0cf5e8766338af746b0c69821cc80890, type: 3}
   - phrase: "\u201EHeute m\xF6chte ich etwas, das sch\xF6n s\xE4uerlich und leicht
       ist.\u201C"
     correctButtonIndex: 4
+    foodPrefab: {fileID: 3123616553075211954, guid: 0cf5e8766338af746b0c69821cc80890, type: 3}
   - phrase: "\u201EIch suche eine Beilage, die gut zu deftigen Gerichten passt.\u201C"
     correctButtonIndex: 4
+    foodPrefab: {fileID: 3123616553075211954, guid: 0cf5e8766338af746b0c69821cc80890, type: 3}
   - phrase: "\u201EMir ist nach etwas Klassischem und Wohlf\xFChlendem.\u201C"
     correctButtonIndex: 4
+    foodPrefab: {fileID: 3123616553075211954, guid: 0cf5e8766338af746b0c69821cc80890, type: 3}
   - phrase: "\u201EIch h\xE4tte gerne etwas mit viel K\xE4se und cremiger Konsistenz.\u201C"
     correctButtonIndex: 5
+    foodPrefab: {fileID: 3123616553075211954, guid: df6530a66b4a0294ebc6e1065594bae2, type: 3}
   - phrase: "\u201EHeute m\xF6chte ich ein herzhaftes Gericht mit geschmolzenem K\xE4se.\u201C"
     correctButtonIndex: 5
+    foodPrefab: {fileID: 3123616553075211954, guid: df6530a66b4a0294ebc6e1065594bae2, type: 3}
   - phrase: "\u201EIch bin in Stimmung f\xFCr etwas Deftiges und K\xE4selastiges.\u201C"
     correctButtonIndex: 5
+    foodPrefab: {fileID: 3123616553075211954, guid: df6530a66b4a0294ebc6e1065594bae2, type: 3}
   - phrase: "\u201EMir ist nach einer cremigen Speise mit kr\xE4ftigem Geschmack.\u201C"
     correctButtonIndex: 5
+    foodPrefab: {fileID: 3123616553075211954, guid: df6530a66b4a0294ebc6e1065594bae2, type: 3}
   currentPhrase:
     phrase: 
     correctButtonIndex: 0
+    foodPrefab: {fileID: 0}
   playerController: {fileID: 70454758}
   currentClient: {fileID: 0}
   scoreText: {fileID: 349249721}
@@ -4216,6 +4401,37 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &1895885743
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1895885744}
+  m_Layer: 0
+  m_Name: FoodSpawnPoint_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1895885744
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895885743}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.51, y: 6.16, z: -12.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1901101934
 GameObject:
   m_ObjectHideFlags: 0
@@ -4352,6 +4568,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1901101934}
   m_CullTransparentMesh: 1
+--- !u!1 &1901357858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1901357860}
+  - component: {fileID: 1901357859}
+  m_Layer: 0
+  m_Name: FoodSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1901357859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901357858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8fb9db89ced89c4798903d37baef490, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoints:
+  - {fileID: 1575324296}
+  - {fileID: 1895885744}
+  - {fileID: 601856398}
+  - {fileID: 555577484}
+  - {fileID: 1325156031}
+--- !u!4 &1901357860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901357858}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -64.64193, y: -3.063221, z: -16.983011}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1987227599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4842,9 +5108,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7909575356919334013, guid: ba980ca0a53887641909738619435080, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 229271558644724370, guid: ba980ca0a53887641909738619435080, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 45017710}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba980ca0a53887641909738619435080, type: 3}
 --- !u!1001 &3397251499041732910
@@ -5532,3 +5805,9 @@ SceneRoots:
   - {fileID: 1659512422}
   - {fileID: 334700940}
   - {fileID: 79654492}
+  - {fileID: 1575324296}
+  - {fileID: 1895885744}
+  - {fileID: 601856398}
+  - {fileID: 555577484}
+  - {fileID: 1325156031}
+  - {fileID: 1901357860}

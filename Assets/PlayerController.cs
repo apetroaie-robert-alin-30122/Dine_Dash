@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
 	public float walkSpeed;
 	public float runSpeed;
 	
+	private FoodPickup heldFood = null;
+    public float pickupRange = 3f;
+	
 	[HideInInspector]
     public bool isLocked = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviour
 		  
         //Horizontal rotation
 		transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 2f);
+		
     }
 	
 	void FixedUpdate()
@@ -69,5 +73,7 @@ public class PlayerController : MonoBehaviour
 		
 		return angle;
 	}
+	
+
 	
 }
