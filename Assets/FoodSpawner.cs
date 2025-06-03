@@ -4,10 +4,12 @@ using UnityEngine;
 public class FoodSpawner : MonoBehaviour
 {
     public Transform[] spawnPoints;
+    public GameObject[] foodPrefabs;  // Assign all your food prefabs here in Inspector
 
     // Track occupied spawn points
     private List<Transform> occupiedSpawnPoints = new List<Transform>();
 
+    // Existing method stays as is
     public void SpawnFood(GameObject foodPrefab)
     {
         if (spawnPoints.Length == 0 || foodPrefab == null)
@@ -49,7 +51,24 @@ public class FoodSpawner : MonoBehaviour
         foodItem.spawnPoint = spawnPoint;
     }
 
-    // Call this method to free a spawn point when food is picked up or destroyed
+    // New overload: spawn by index
+    public void SpawnFood(int foodIndex)
+    {
+        if (foodPrefabs == null || foodPrefabs.Length == 0)
+        {
+            Debug.LogWarning("Food prefabs array is empty.");
+            return;
+        }
+
+        if (foodIndex < 0 || foodIndex >= foodPrefabs.Length)
+        {
+            Debug.LogWarning("Invalid food index.");
+            return;
+        }
+
+        SpawnFood(foodPrefabs[foodIndex]);
+    }
+
     public void FreeSpawnPoint(Transform spawnPoint)
     {
         if (occupiedSpawnPoints.Contains(spawnPoint))

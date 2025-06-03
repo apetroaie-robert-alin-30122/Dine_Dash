@@ -8,6 +8,8 @@ public class FoodItem : MonoBehaviour
 	
 	public FoodSpawner spawner;
     public Transform spawnPoint;
+	
+	public int foodValue = -1; // 0–5 depending on food type
 
     void Start()
     {
@@ -28,20 +30,20 @@ public class FoodItem : MonoBehaviour
             transform.LookAt(player); // Always face player
         }
     }
-
-    public void PickUp()
-    {
-        isHeld = true;
-        GetComponent<Collider>().enabled = false;
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb) rb.isKinematic = true;
-    }
 	
-	private void OnDestroy()
+	void OnTriggerStay(Collider other)
     {
-        if (spawner != null && spawnPoint != null)
+        if (other.CompareTag("Player"))
         {
-            spawner.FreeSpawnPoint(spawnPoint);
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                PlayerController player = other.GetComponent<PlayerController>();
+                if (player != null && player.carriedFoodValue == -1)
+                {
+                    player.carriedFoodValue = foodValue;
+                    Destroy(gameObject); // Remove food from scene
+                }
+            }
         }
     }
 }

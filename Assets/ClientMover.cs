@@ -12,8 +12,12 @@ public class ClientMover : MonoBehaviour
 
     private Transform player;
     private bool isMoving = true;
-    private bool canInteract = false;
+    [HideInInspector] public bool canInteract = false;
     private DialogueManager dialogueManager;
+	
+	[HideInInspector]
+    public int requiredFoodValue = -1;
+    public bool hasReceivedFood = false;
 
     public Transform entryPoint;
 
@@ -39,18 +43,43 @@ public class ClientMover : MonoBehaviour
     void Update()
     {
         if (!isMoving && canInteract && Input.GetKeyDown(KeyCode.E))
+{
+    if (!dialogueManager.IsDialogueActive && player != null)
+    {
+        float dist = Vector3.Distance(player.position, transform.position);
+        if (dist < 3f)
         {
-            if (!dialogueManager.IsDialogueActive && player != null)
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if (hasReceivedFood)
+                return;
+
+            if (requiredFoodValue == -1)
             {
-                float dist = Vector3.Distance(player.position, transform.position);
-                if (dist <= 10f)
+                // Initial dialogue
+                dialogueManager.currentClient = gameObject;
+                HideExclamation();
+                dialogueManager.ShowRandomDialogue();
+            }
+            else if (controller != null && controller.carriedFoodValue != -1)
+            {
+                if (controller.carriedFoodValue == requiredFoodValue)
                 {
-                    dialogueManager.currentClient = gameObject;
-                    HideExclamation();
-                    dialogueManager.ShowRandomDialogue();
+                    // Correct food delivered
+                    dialogueManager.AddScore(10);
+                    hasReceivedFood = true;
+                    controller.carriedFoodValue = -1;
+                    Destroy(this.exclamationMark); // Optionally remove "!" when done
+                }
+                else
+                {
+                    ReturnToSpawn(true);
+                    controller.carriedFoodValue = -1;
+                    hasReceivedFood = true;
                 }
             }
         }
+    }
+}
 
         if (!isMoving || SeatPoint == null)
             return;
@@ -116,4 +145,24 @@ public class ClientMover : MonoBehaviour
             Gizmos.DrawWireSphere(SeatPoint.position, stopDistance);
         }
     }
+	
+	public void LeaveAfterDelay(float delaySeconds = 5f)
+{
+    StartCoroutine(LeaveAfterDelayCoroutine(delaySeconds));
+}
+
+private IEnumerator LeaveAfterDelayCoroutine(float delay)
+{
+    yield return new WaitForSeconds(delay);  // waits in seconds
+    ReturnToSpawn(false);
+}
+
+public void SetCanInteract(bool value)
+{
+    canInteract = value;
+    if (!value)
+    {
+        HideExclamation();
+    }
+}
 }

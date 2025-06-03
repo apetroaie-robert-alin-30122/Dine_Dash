@@ -9,7 +9,7 @@ public class DialoguePhrase
     [TextArea(2, 5)]
     public string phrase;
     public int correctButtonIndex;
-	public GameObject foodPrefab;
+    public GameObject foodPrefab; // Food prefab to spawn for this phrase
 }
 
 public class DialogueManager : MonoBehaviour
@@ -28,22 +28,20 @@ public class DialogueManager : MonoBehaviour
     public GameObject currentClient;
     public TMP_Text scoreText;
     private int score = 0;
-	
-	private FoodSpawner foodSpawner;
+
+    private FoodSpawner foodSpawner;
 
     void Awake()
     {
         playerController = FindObjectOfType<PlayerController>();
         if (playerController == null)
-        {
             Debug.LogWarning("PlayerController not found in the scene!");
-        }
-		foodSpawner = FindObjectOfType<FoodSpawner>();
+
+        foodSpawner = FindObjectOfType<FoodSpawner>();
     }
 
     public void ShowRandomDialogue()
-    { 
-	
+    {
         if (dialoguePhrases.Count == 0) return;
 
         currentPhrase = dialoguePhrases[Random.Range(0, dialoguePhrases.Count)];
@@ -66,8 +64,6 @@ public class DialogueManager : MonoBehaviour
 
         if (playerController != null)
             playerController.isLocked = true;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
 
         if (currentClient != null)
         {
@@ -84,12 +80,10 @@ public class DialogueManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        if (playerController != null){
+        if (playerController != null)
             playerController.isLocked = false;
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-		}
-		TooltipManager.Instance.HideTooltip();
+
+        TooltipManager.Instance.HideTooltip();
     }
 
     void OnResponseSelected(int selectedButtonIndex)
@@ -97,12 +91,23 @@ public class DialogueManager : MonoBehaviour
         if (selectedButtonIndex == currentPhrase.correctButtonIndex)
         {
             Debug.Log("Correct answer selected!");
-            score += 10;
-            UpdateScoreUI();
-			if (currentPhrase.foodPrefab != null)
-                foodSpawner.SpawnFood(currentPhrase.foodPrefab);
+			AddScore(10);
 
-            // Răspuns corect → clientul rămâne la masă
+            // Spawn the food prefab associated with this dialogue phrase
+            if (foodSpawner != null && currentPhrase.foodPrefab != null)
+            {
+                foodSpawner.SpawnFood(currentPhrase.foodPrefab);
+            }
+
+            // Disable client interaction until food is delivered
+            if (currentClient != null)
+            {
+                ClientMover mover = currentClient.GetComponent<ClientMover>();
+                if (mover != null)
+                {
+                    mover.canInteract = false;
+                }
+            }
         }
         else
         {
@@ -112,11 +117,50 @@ public class DialogueManager : MonoBehaviour
             {
                 var mover = currentClient.GetComponent<ClientMover>();
                 if (mover != null)
-                    mover.ReturnToSpawn(true); // Față nervoasă + plecare
+                    mover.ReturnToSpawn(true); // angry face + leave
             }
         }
 
         HideDialogue();
+    }
+
+    // Call this from player interaction when they deliver the correct food
+    public void OnFoodDeliveredCorrect()
+    {
+        Debug.Log("Correct food delivered!");
+
+        AddScore(10);
+
+        if (currentClient != null)
+        {
+            ClientMover mover = currentClient.GetComponent<ClientMover>();
+            if (mover != null)
+            {
+                mover.canInteract = false;
+                mover.LeaveAfterDelay(5f);
+            }
+        }
+    }
+
+    // Call this from player interaction when they deliver the wrong food
+    public void OnFoodDeliveredWrong()
+    {
+        Debug.Log("Wrong food delivered!");
+
+        if (currentClient != null)
+        {
+            ClientMover mover = currentClient.GetComponent<ClientMover>();
+            if (mover != null)
+            {
+                mover.ReturnToSpawn(true); // angry face + leave
+            }
+        }
+    }
+
+    public void AddScore(int amount)
+    {
+        score += amount;
+        UpdateScoreUI();
     }
 
     void UpdateScoreUI()

@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
 	private FoodPickup heldFood = null;
     public float pickupRange = 3f;
 	
+	 [Header("Food")]
+    public int carriedFoodValue = -2;
+
+	
 	[HideInInspector]
     public bool isLocked = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,6 +39,12 @@ public class PlayerController : MonoBehaviour
 		  
         //Horizontal rotation
 		transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 2f);
+		
+		if (Input.GetKeyDown(KeyCode.Q))
+        {
+            // Drop or consume food (optional)
+            Debug.Log("Held Food Value: " + carriedFoodValue);
+        }
 		
     }
 	
@@ -73,7 +83,11 @@ public class PlayerController : MonoBehaviour
 		
 		return angle;
 	}
-	
+	public void ClearHeldFood()
+{
+    carriedFoodValue = -1;
+    // Also disable/hide held food sprite here
+}
 
 	
-}
+} 

@@ -4603,6 +4603,7 @@ MonoBehaviour:
   - {fileID: 601856398}
   - {fileID: 555577484}
   - {fileID: 1325156031}
+  foodPrefabs: []
 --- !u!4 &1901357860
 Transform:
   m_ObjectHideFlags: 0

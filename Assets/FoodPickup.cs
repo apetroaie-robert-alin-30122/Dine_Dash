@@ -2,65 +2,54 @@ using UnityEngine;
 
 public class FoodPickup : MonoBehaviour
 {
-    public float pickupRange = 3f;
-    public Transform holdPosition; // Assign in inspector or set to player's hold point
+    private bool isHeld = false;
     private Transform player;
-    private bool isCarried = false;
+    private Transform holdPoint;
+    private Rigidbody rb;
 
     void Start()
     {
-		player = GameObject.FindWithTag("Player")?.transform;
-
-    if (player != null)
-    {
-        // Look for child object named "HoldPoint"
-        Transform hold = player.Find("HoldPoint");
-        if (hold != null)
-        {
-            holdPosition = hold;
-        }
-        else
-        {
-            Debug.LogWarning("HoldPoint not found as child of Player.");
-        }
-    }
+        player = GameObject.FindWithTag("Player")?.transform;
+        holdPoint = GameObject.Find("HoldPoint")?.transform;
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        if (isCarried)
+        if (isHeld && player != null && holdPoint != null)
         {
-            // Keep the food in front of player, facing player
-            transform.position = holdPosition.position;
-            transform.rotation = Quaternion.LookRotation(player.position - transform.position);
+            transform.position = holdPoint.position;
+            transform.rotation = Quaternion.LookRotation(player.forward);
         }
-        else
-        {
-            if (player == null) return;
-
-            float distance = Vector3.Distance(transform.position, player.position);
-            if (distance <= pickupRange && Input.GetKeyDown(KeyCode.E))
-            {
-                PickUp();
-            }
-        }
-		
     }
 
-    void PickUp()
+    void OnTriggerStay(Collider other)
     {
-        isCarried = true;
-
-        // Optional: Disable physics while carrying
-        if (TryGetComponent<Rigidbody>(out Rigidbody rb))
+        if (!isHeld && other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
-            rb.isKinematic = true;
-        }
-
-        // Optional: Disable collider to avoid interference while carrying
-        if (TryGetComponent<Collider>(out Collider col))
-        {
-            col.enabled = false;
+            Pickup();
         }
     }
+
+    void Pickup()
+{
+    GameObject player = GameObject.FindGameObjectWithTag("Player");
+    Transform holdPoint = player.transform.Find("HoldPoint");
+
+    if (holdPoint != null)
+    {
+        transform.SetParent(holdPoint);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true; // Disable physics
+            rb.detectCollisions = false;
+        }
+
+        isHeld = true;
+    }
+}
 }
