@@ -1,79 +1,46 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class FoodSpawner : MonoBehaviour
 {
-    public Transform[] spawnPoints;
-    public GameObject[] foodPrefabs;  // Assign all your food prefabs here in Inspector
+    public List<Transform> spawnPoints;
+    public List<Transform> freeSpawnPoints;
+    public List<GameObject> foodPrefabs;
 
-    // Track occupied spawn points
-    private List<Transform> occupiedSpawnPoints = new List<Transform>();
-
-    // Existing method stays as is
-    public void SpawnFood(GameObject foodPrefab)
+    void Start()
     {
-        if (spawnPoints.Length == 0 || foodPrefab == null)
-        {
-            Debug.LogWarning("No spawn points or prefab provided.");
-            return;
-        }
+        freeSpawnPoints = new List<Transform>(spawnPoints);
+    }
 
-        // Get free spawn points by filtering out occupied ones
-        List<Transform> freeSpawnPoints = new List<Transform>();
-
-        foreach (var point in spawnPoints)
-        {
-            if (!occupiedSpawnPoints.Contains(point))
-                freeSpawnPoints.Add(point);
-        }
-
+    public void SpawnFood(GameObject prefab)
+    {
         if (freeSpawnPoints.Count == 0)
         {
             Debug.LogWarning("No free spawn points available.");
             return;
         }
 
-        // Pick a random free spawn point
-        Transform spawnPoint = freeSpawnPoints[Random.Range(0, freeSpawnPoints.Count)];
+        Transform point = freeSpawnPoints[0];
+        freeSpawnPoints.RemoveAt(0);
 
-        // Instantiate food
-        GameObject food = Instantiate(foodPrefab, spawnPoint.position, Quaternion.identity);
-
-        // Mark this spawn point as occupied
-        occupiedSpawnPoints.Add(spawnPoint);
-
-        // Make food face the player (optional)
-        food.transform.LookAt(Camera.main.transform.position);
-
-        // Add FoodItem component for management
-        FoodItem foodItem = food.AddComponent<FoodItem>();
-        foodItem.spawner = this;
-        foodItem.spawnPoint = spawnPoint;
+        GameObject obj = Instantiate(prefab, point.position, point.rotation);
+        FoodItem foodItem = obj.GetComponent<FoodItem>();
+        if (foodItem != null)
+        {
+            foodItem.spawner = this;
+            foodItem.spawnPoint = point;
+        }
     }
 
-    // New overload: spawn by index
-    public void SpawnFood(int foodIndex)
+    // ✅ Metodă nouă pentru a elibera spawn point-ul
+    public void ReleaseSpawnPoint(Transform point)
     {
-        if (foodPrefabs == null || foodPrefabs.Length == 0)
-        {
-            Debug.LogWarning("Food prefabs array is empty.");
+        if (!spawnPoints.Contains(point))
             return;
-        }
 
-        if (foodIndex < 0 || foodIndex >= foodPrefabs.Length)
+        if (!freeSpawnPoints.Contains(point))
         {
-            Debug.LogWarning("Invalid food index.");
-            return;
-        }
-
-        SpawnFood(foodPrefabs[foodIndex]);
-    }
-
-    public void FreeSpawnPoint(Transform spawnPoint)
-    {
-        if (occupiedSpawnPoints.Contains(spawnPoint))
-        {
-            occupiedSpawnPoints.Remove(spawnPoint);
+            freeSpawnPoints.Add(point);
         }
     }
 }

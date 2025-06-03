@@ -1,93 +1,88 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-	public bool canLookAround = true;
-	[Header("Referencer")]
-	public Rigidbody rb;
-	public Transform head;
-	public Camera camera;
-	
-	[Header("Configurations")]
-	public float walkSpeed;
-	public float runSpeed;
-	
-	private FoodPickup heldFood = null;
-    public float pickupRange = 3f;
-	
-	 [Header("Food")]
-    public int carriedFoodValue = -2;
+    public bool canLookAround = true;
 
-	
-	[HideInInspector]
+    [Header("Referencer")]
+    public Rigidbody rb;
+    public Transform head;
+    public new Camera camera;
+
+    [Header("Configurations")]
+    public float walkSpeed;
+    public float runSpeed;
+
+    [Header("Food")]
+    public int carriedFoodValue = -1;  // -1 = nimic în mână
+    [HideInInspector] public GameObject heldDishObject;
+
+    public float pickupRange = 3f;
+
+    [HideInInspector]
     public bool isLocked = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
-     Cursor.visible = false;
-     Cursor.lockState = CursorLockMode.Locked;
-     	 
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
     void Update()
     {
-		
-		if (isLocked) return ;// Disable movement and rotation while dialogue
-		  
-        //Horizontal rotation
-		transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 2f);
-		
-		if (Input.GetKeyDown(KeyCode.Q))
+        if (isLocked) return;
+
+        transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 2f);
+
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            // Drop or consume food (optional)
             Debug.Log("Held Food Value: " + carriedFoodValue);
         }
-		
     }
-	
-	void FixedUpdate()
-	{
-	if (isLocked) return;
-		
-	Vector3 newVelocity = Vector3.up * rb.linearVelocity.y;
-	float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
-	newVelocity.x = Input.GetAxis("Horizontal") * speed;
-	newVelocity.z = Input.GetAxis("Vertical") * speed;
-	rb.linearVelocity = transform.TransformDirection(newVelocity);
-	}
-	
-	void LateUpdate () 
-	{
-	  if (isLocked) return;  // Disable rotation while dialogue
-	  // Vertical rotation
-	  Vector3 e = head.eulerAngles;
-	  e.x -= Input.GetAxis("Mouse Y") * 2f;
-	  e.x = RestricAngle(e.x, -85f, 85f);
-	  head.eulerAngles = e;
-	}
-	// Clamp the vertical head rotaion
-	public static float RestricAngle(float angle, float angleMin, float angleMax)
-	{
-		if (angle > 180)
-			angle -= 360;
-		else if (angle < -180)
-			angle += 360;
-		
-		if (angle > angleMax)
-			angle = angleMax;
-		if (angle < angleMin)
-			angle = angleMin;
-		
-		return angle;
-	}
-	public void ClearHeldFood()
-{
-    carriedFoodValue = -1;
-    // Also disable/hide held food sprite here
-}
 
-	
-} 
+    void FixedUpdate()
+    {
+        if (isLocked) return;
+
+        Vector3 newVelocity = Vector3.up * rb.linearVelocity.y;
+        float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
+        newVelocity.x = Input.GetAxis("Horizontal") * speed;
+        newVelocity.z = Input.GetAxis("Vertical") * speed;
+
+        rb.linearVelocity = transform.TransformDirection(newVelocity);
+    }
+
+    void LateUpdate()
+    {
+        if (isLocked) return;
+
+        Vector3 e = head.eulerAngles;
+        e.x -= Input.GetAxis("Mouse Y") * 2f;
+        e.x = RestricAngle(e.x, -85f, 85f);
+        head.eulerAngles = e;
+    }
+
+    public static float RestricAngle(float angle, float angleMin, float angleMax)
+    {
+        if (angle > 180)
+            angle -= 360;
+        else if (angle < -180)
+            angle += 360;
+
+        return Mathf.Clamp(angle, angleMin, angleMax);
+    }
+
+    public void ClearHeldFood()
+    {
+        carriedFoodValue = -1;
+
+        if (heldDishObject != null)
+        {
+            Destroy(heldDishObject);
+            heldDishObject = null;
+        }
+    }
+}

@@ -40,20 +40,16 @@ public class ClientSpawner : MonoBehaviour
 
     void SpawnClient()
     {
-        // Choose random seat and remove from available
         int seatIndex = Random.Range(0, availableSeats.Count);
         Transform chosenSeat = availableSeats[seatIndex];
         availableSeats.RemoveAt(seatIndex);
 
-        // Choose random unused prefab and remove from list
         int prefabIndex = Random.Range(0, unusedPrefabs.Count);
         GameObject selectedPrefab = unusedPrefabs[prefabIndex];
         unusedPrefabs.RemoveAt(prefabIndex);
 
-        // Instantiate client at entry point
         GameObject newClient = Instantiate(selectedPrefab, entryPoint.position, Quaternion.identity);
 
-        // Assign references in ClientMover
         ClientMover mover = newClient.GetComponent<ClientMover>();
         if (mover != null)
         {
@@ -68,18 +64,20 @@ public class ClientSpawner : MonoBehaviour
             if (angry != null)
                 mover.angryFace = angry.gameObject;
 
-            // Hook into client removal to free seat when it leaves
+            // Nou: găsește DishPoint în SeatPoint
+            Transform dishPoint = chosenSeat.Find("DishPoint");
+            if (dishPoint != null)
+                mover.dishPoint = dishPoint;
+
             StartCoroutine(TrackClientLifecycle(mover, chosenSeat));
         }
     }
 
     IEnumerator TrackClientLifecycle(ClientMover mover, Transform seat)
     {
-        // Wait until client is destroyed
         while (mover != null)
             yield return null;
 
-        // Add the seat back once the client is gone
         if (!availableSeats.Contains(seat))
             availableSeats.Add(seat);
     }

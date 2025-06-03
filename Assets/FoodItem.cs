@@ -1,48 +1,72 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FoodItem : MonoBehaviour
 {
     private Transform player;
-    private bool isHeld = false;
     private Transform holdPoint;
-	
-	public FoodSpawner spawner;
+    private bool isHeld = false;
+
+    public FoodSpawner spawner;
     public Transform spawnPoint;
-	
-	public int foodValue = -1; // 0–5 depending on food type
+    public int foodValue = -1;
 
     void Start()
     {
-        player = GameObject.Find("Player")?.transform;
+        player = GameObject.FindWithTag("Player")?.transform;
         holdPoint = GameObject.Find("FoodHoldPoint")?.transform;
     }
 
     void Update()
     {
-        if (player != null)
-        {
-            Vector3 lookPos = new Vector3(player.position.x, transform.position.y, player.position.z);
-            transform.LookAt(lookPos);
-        }		
         if (isHeld && holdPoint != null)
         {
             transform.position = holdPoint.position;
-            transform.LookAt(player); // Always face player
+            transform.rotation = holdPoint.rotation;
+        }
+        else if (player != null)
+        {
+            Vector3 lookPos = new Vector3(player.position.x, transform.position.y, player.position.z);
+            transform.LookAt(lookPos);
         }
     }
-	
-	void OnTriggerStay(Collider other)
+
+    void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null && playerController.carriedFoodValue == -1)
             {
-                PlayerController player = other.GetComponent<PlayerController>();
-                if (player != null && player.carriedFoodValue == -1)
+                playerController.carriedFoodValue = foodValue;
+                playerController.heldDishObject = gameObject;
+
+                Debug.Log("Picked up food with value: " + foodValue);
+
+                // 🔄 ELIBEREAZĂ spawn point-ul
+                if (spawner != null && spawnPoint != null)
                 {
-                    player.carriedFoodValue = foodValue;
-                    Destroy(gameObject); // Remove food from scene
+                    spawner.ReleaseSpawnPoint(spawnPoint);
                 }
+
+                if (holdPoint != null)
+                {
+                    transform.SetParent(holdPoint);
+                    transform.localPosition = Vector3.zero;
+                    transform.localRotation = Quaternion.identity;
+                }
+
+                Rigidbody rb = GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = true;
+                    rb.detectCollisions = false;
+                }
+
+                isHeld = true;
+            }
+            else
+            {
+                Debug.LogWarning("Player already holds food: " + playerController?.carriedFoodValue);
             }
         }
     }

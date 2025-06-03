@@ -9,7 +9,7 @@ public class DialoguePhrase
     [TextArea(2, 5)]
     public string phrase;
     public int correctButtonIndex;
-    public GameObject foodPrefab; // Food prefab to spawn for this phrase
+    public GameObject foodPrefab;
 }
 
 public class DialogueManager : MonoBehaviour
@@ -33,11 +33,11 @@ public class DialogueManager : MonoBehaviour
 
     void Awake()
     {
-        playerController = FindObjectOfType<PlayerController>();
+        playerController = Object.FindAnyObjectByType<PlayerController>();
         if (playerController == null)
             Debug.LogWarning("PlayerController not found in the scene!");
 
-        foodSpawner = FindObjectOfType<FoodSpawner>();
+        foodSpawner = Object.FindAnyObjectByType<FoodSpawner>();
     }
 
     public void ShowRandomDialogue()
@@ -83,7 +83,7 @@ public class DialogueManager : MonoBehaviour
         if (playerController != null)
             playerController.isLocked = false;
 
-        TooltipManager.Instance.HideTooltip();
+        TooltipManager.Instance?.HideTooltip();
     }
 
     void OnResponseSelected(int selectedButtonIndex)
@@ -91,21 +91,20 @@ public class DialogueManager : MonoBehaviour
         if (selectedButtonIndex == currentPhrase.correctButtonIndex)
         {
             Debug.Log("Correct answer selected!");
-			AddScore(10);
+            AddScore(10);
 
-            // Spawn the food prefab associated with this dialogue phrase
             if (foodSpawner != null && currentPhrase.foodPrefab != null)
             {
                 foodSpawner.SpawnFood(currentPhrase.foodPrefab);
             }
 
-            // Disable client interaction until food is delivered
             if (currentClient != null)
             {
                 ClientMover mover = currentClient.GetComponent<ClientMover>();
                 if (mover != null)
                 {
-                    mover.canInteract = false;
+                    // FIX: NU mai dezactivăm interacțiunea
+                    // mover.canInteract = false;
                 }
             }
         }
@@ -117,18 +116,16 @@ public class DialogueManager : MonoBehaviour
             {
                 var mover = currentClient.GetComponent<ClientMover>();
                 if (mover != null)
-                    mover.ReturnToSpawn(true); // angry face + leave
+                    mover.ReturnToSpawn(true);
             }
         }
 
         HideDialogue();
     }
 
-    // Call this from player interaction when they deliver the correct food
     public void OnFoodDeliveredCorrect()
     {
         Debug.Log("Correct food delivered!");
-
         AddScore(10);
 
         if (currentClient != null)
@@ -142,7 +139,6 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // Call this from player interaction when they deliver the wrong food
     public void OnFoodDeliveredWrong()
     {
         Debug.Log("Wrong food delivered!");
@@ -152,7 +148,7 @@ public class DialogueManager : MonoBehaviour
             ClientMover mover = currentClient.GetComponent<ClientMover>();
             if (mover != null)
             {
-                mover.ReturnToSpawn(true); // angry face + leave
+                mover.ReturnToSpawn(true);
             }
         }
     }
@@ -166,6 +162,6 @@ public class DialogueManager : MonoBehaviour
     void UpdateScoreUI()
     {
         if (scoreText != null)
-            scoreText.text = "$ " + score.ToString();
+            scoreText.text = "Points: " + score.ToString();
     }
 }

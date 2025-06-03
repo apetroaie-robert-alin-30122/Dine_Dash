@@ -14,12 +14,14 @@ public class ClientMover : MonoBehaviour
     private bool isMoving = true;
     [HideInInspector] public bool canInteract = false;
     private DialogueManager dialogueManager;
-	
-	[HideInInspector]
-    public int requiredFoodValue = -1;
+
+    [HideInInspector] public int requiredFoodValue = -1;
     public bool hasReceivedFood = false;
 
     public Transform entryPoint;
+
+    public Transform dishPoint;
+    public GameObject currentDishPrefab;
 
     void Start()
     {
@@ -30,7 +32,7 @@ public class ClientMover : MonoBehaviour
             angryFace.SetActive(false);
 
         player = GameObject.Find("Player")?.transform;
-        dialogueManager = FindObjectOfType<DialogueManager>();
+        dialogueManager = Object.FindAnyObjectByType<DialogueManager>();
 
         if (entryPoint == null)
         {
@@ -43,43 +45,81 @@ public class ClientMover : MonoBehaviour
     void Update()
     {
         if (!isMoving && canInteract && Input.GetKeyDown(KeyCode.E))
-{
-    if (!dialogueManager.IsDialogueActive && player != null)
-    {
-        float dist = Vector3.Distance(player.position, transform.position);
-        if (dist < 3f)
         {
-            PlayerController controller = player.GetComponent<PlayerController>();
-            if (hasReceivedFood)
-                return;
+            Debug.Log("Trying to interact with client");
 
-            if (requiredFoodValue == -1)
+            if (!dialogueManager.IsDialogueActive && player != null)
             {
-                // Initial dialogue
-                dialogueManager.currentClient = gameObject;
-                HideExclamation();
-                dialogueManager.ShowRandomDialogue();
-            }
-            else if (controller != null && controller.carriedFoodValue != -1)
-            {
-                if (controller.carriedFoodValue == requiredFoodValue)
+                float dist = Vector3.Distance(player.position, transform.position);
+                if (dist < 3f)
                 {
-                    // Correct food delivered
-                    dialogueManager.AddScore(10);
-                    hasReceivedFood = true;
-                    controller.carriedFoodValue = -1;
-                    Destroy(this.exclamationMark); // Optionally remove "!" when done
-                }
-                else
-                {
-                    ReturnToSpawn(true);
-                    controller.carriedFoodValue = -1;
-                    hasReceivedFood = true;
+                    PlayerController controller = player.GetComponent<PlayerController>();
+                    if (hasReceivedFood)
+                    {
+                        Debug.Log("Client already served.");
+                        return;
+                    }
+
+                    if (requiredFoodValue == -1)
+                    {
+                        Debug.Log("Opening dialogue...");
+                        dialogueManager.currentClient = gameObject;
+                        HideExclamation();
+                        dialogueManager.ShowRandomDialogue();
+
+                        if (dialogueManager.currentPhrase != null && dialogueManager.currentPhrase.foodPrefab != null)
+                        {
+                            FoodItem foodItem = dialogueManager.currentPhrase.foodPrefab.GetComponent<FoodItem>();
+                            if (foodItem != null)
+                            {
+                                requiredFoodValue = foodItem.foodValue;
+                                Debug.Log("Client wants food value: " + requiredFoodValue);
+                            }
+                        }
+                    }
+                    else if (controller != null && controller.carriedFoodValue != -1)
+                    {
+                        Debug.Log("Trying to deliver food value: " + controller.carriedFoodValue);
+
+                        if (controller.carriedFoodValue == requiredFoodValue)
+                        {
+                            Debug.Log("Correct food delivered!");
+
+                            dialogueManager.AddScore(10);
+                            hasReceivedFood = true;
+
+                            if (dishPoint != null && dialogueManager.currentPhrase != null)
+                            {
+                                currentDishPrefab = Instantiate(dialogueManager.currentPhrase.foodPrefab, dishPoint.position, dishPoint.rotation);
+
+                                Rigidbody rb = currentDishPrefab.GetComponent<Rigidbody>();
+                                if (rb != null)
+                                {
+                                    rb.isKinematic = true;
+                                    rb.useGravity = false;
+                                }
+                            }
+
+                            controller.ClearHeldFood();
+                            Destroy(this.exclamationMark);
+                            StartCoroutine(RemoveDishAfterDelay());
+                            LeaveAfterDelay(5f);
+                        }
+                        else
+                        {
+                            Debug.Log("Wrong food delivered!");
+                            ReturnToSpawn(true);
+                            controller.ClearHeldFood();
+                            hasReceivedFood = true;
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Player has no food to deliver.");
+                    }
                 }
             }
         }
-    }
-}
 
         if (!isMoving || SeatPoint == null)
             return;
@@ -99,6 +139,15 @@ public class ClientMover : MonoBehaviour
 
             if (exclamationMark != null)
                 exclamationMark.SetActive(true);
+        }
+    }
+
+    IEnumerator RemoveDishAfterDelay()
+    {
+        yield return new WaitForSeconds(5f);
+        if (currentDishPrefab != null)
+        {
+            Destroy(currentDishPrefab);
         }
     }
 
@@ -145,24 +194,24 @@ public class ClientMover : MonoBehaviour
             Gizmos.DrawWireSphere(SeatPoint.position, stopDistance);
         }
     }
-	
-	public void LeaveAfterDelay(float delaySeconds = 5f)
-{
-    StartCoroutine(LeaveAfterDelayCoroutine(delaySeconds));
-}
 
-private IEnumerator LeaveAfterDelayCoroutine(float delay)
-{
-    yield return new WaitForSeconds(delay);  // waits in seconds
-    ReturnToSpawn(false);
-}
-
-public void SetCanInteract(bool value)
-{
-    canInteract = value;
-    if (!value)
+    public void LeaveAfterDelay(float delaySeconds = 5f)
     {
-        HideExclamation();
+        StartCoroutine(LeaveAfterDelayCoroutine(delaySeconds));
     }
-}
+
+    private IEnumerator LeaveAfterDelayCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ReturnToSpawn(false);
+    }
+
+    public void SetCanInteract(bool value)
+    {
+        canInteract = value;
+        if (!value)
+        {
+            HideExclamation();
+        }
+    }
 }
